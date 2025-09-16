@@ -1,5 +1,6 @@
 import "./App.css";
 import AppNavBar from "./AppNavBar";
+import Product from "./Product";
 import { Container, Row, Col } from "react-bootstrap";
 // src/assets 폴더 내의 이미지는 import해서 사용
 import bg_png from "./assets/images/bg.png";
@@ -25,33 +26,13 @@ function App() {
         {/* 상품 진열 */}
         <Container>
           <Row>
-            <Col className="text-left"> 
-              <img
-                src="https://zzzmini.github.io/images/shoes1.jpg"
-                width="80%"
-                alt="shoes1"
-              />
-              <h4>상품명</h4>
-              <p>상품설명</p>
-            </Col>
-            <Col>
-              <img
-                src="/images/shoes2.jpg"
-                width="80%"
-                alt="shoes1"
-              />
-              <h4>상품명</h4>
-              <p>상품설명</p>
-            </Col>
-            <Col>
-              <img
-                src="/images/shoes3.jpg"
-                width="80%"
-                alt="shoes1"
-              />
-              <h4>상품명</h4>
-              <p>상품설명</p>
-            </Col>
+            {
+              product.map((s, i) => {
+                return(
+                  <Product product={s} key={i} />
+                );
+              })
+            }
           </Row>
         </Container>
       </div>
