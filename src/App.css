@@ -1,9 +1,8 @@
-.main-bg{
-    height: 300px;
-    /* public 폴더에 있는 이미지는 절대 참조 */
-    /* src/assets 폴더에 있는 이미지는 상대 참조 */
-    /* 루트는 public 폴더 가르킴 */
-    background-image: url('/images/bg.jpg');
-    background-size: cover;
-    background-position: center;
+.main-bg {
+  height: 300px;
+  /* public 폴더에 있는 이미지는 절대참조 */
+  /* 루트는 public 폴더 가리킴. */
+  background-image: url('/images/bg.jpg');
+  background-size: cover;
+  background-position: center;
 }
