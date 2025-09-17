@@ -1,4 +1,4 @@
-import "./About.css"
+import "./About.css";
 import { Outlet } from "react-router-dom";
 
 function About(){
