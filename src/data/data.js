@@ -17,4 +17,4 @@ export default [
     content : "Born in the States",
     price : 130000
   }
-]
+];

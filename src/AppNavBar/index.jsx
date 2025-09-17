@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Nav, Navbar , NavDropdown } from "react-bootstrap";
-import './AppNavBar.css'
+import './AppNavBar.css';
 // Route : 페이지(컴포넌트) 이동 처리
 // Routes : Route를 감싸는 용도
 // useParams : url에 담겨있는 정보를 획득
@@ -19,8 +19,8 @@ function AppNavBar(){
           <Container>
             <Navbar.Brand>Muzinjang</Navbar.Brand>
             <Nav className="me-auto">
-              <Nav.Link onClick={()=>{navigate('/')}}>Home</Nav.Link>
-              <Nav.Link onClick={()=>{navigate('/detail')}}>Detail</Nav.Link>
+              <Nav.Link onClick={()=>{navigate('/');}}>Home</Nav.Link>
+              {/* <Nav.Link onClick={()=>{navigate('/detail');}}>Detail</Nav.Link> */}
               <Nav.Link>Cart</Nav.Link>
               <Nav.Link onClick={()=>navigate('/about')}>About</Nav.Link>
               <NavDropdown title="Info" id="basic-nav-dropdown">
@@ -32,7 +32,7 @@ function AppNavBar(){
         </Navbar>
       </div>
     </>
-  )
+  );
 }
 
 export default AppNavBar;

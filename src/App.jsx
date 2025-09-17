@@ -1,8 +1,8 @@
 import "./App.css";
 import AppNavBar from "./AppNavBar";
 // assets 폴더 내의 이미지 사용법 -> import 해서 사용
-import bg_png from "./assets/images/bg.png"
-import img_2 from "./assets/images/shoes2.jpg"
+import bg_png from "./assets/images/bg.png";
+import img_2 from "./assets/images/shoes2.jpg";
 import {Container, Row, Col} from 'react-bootstrap';
 import data from "./data/data";
 import { useState } from "react";
@@ -29,7 +29,9 @@ function App() {
       {/* 스프링에서 사용하는 컨트롤러 클래스 */}
       <Routes>
         <Route path="/" element={<div>메인페이지</div>} />
-        <Route path="/detail" element={<Detail/>} />
+        {/* PathVariable */}
+        {/* /detail/1, /detail/2 이런식으로 적용 */}
+        <Route path="/detail/:id" element={<Detail product={product}/>} />
         <Route path="/cart" element={<div>장바구니페이지</div>} />
         {/* 중첩 라우팅 처리 */}
         <Route path="/about" element={<About />}>
@@ -48,7 +50,7 @@ function App() {
                   {/* Product 콤포넌트 자리 */}
                   <Product shoes={shoes}/>
                 </Col>
-              )
+              );
             })
           }
         </Row>
