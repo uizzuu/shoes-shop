@@ -1,10 +1,40 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Product from "../Product";
 import axios from "axios";
+import { useState } from "react";
+import bg_png from "../assets/images/bg.png";
 
-function Home({ product, setProduct }) {
+function Home({ product, setProduct, count, setCount }) {
+  const [loading, setLoading] = useState(false); // 로딩 상태
+
+  const handleClick = async () => {
+    if (count >= 2) {
+      alert("더 이상 상품이 없습니다.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const fileNum = String(count + 1).padStart(2, "0");
+      const url = `https://zzzmini.github.io/js/react_data_${fileNum}.json`;
+      const result = await axios.get(url);
+      setProduct([...product, ...result.data]);
+      setCount(count + 1);
+    } catch (error) {
+      console.log("axios 가져오기 실패", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
+      {/* 메인 대문사진 영역 시작 */}
+      <div
+        className="main-bg"
+        style={{ backgroundImage: `url('${bg_png}')` }}
+      />
+      {/* 메인 대문사진 영역 끝 */}
       <Container>
         <Row xs={3}>
           {product.map((shoes, _) => {
@@ -17,36 +47,14 @@ function Home({ product, setProduct }) {
           })}
         </Row>
       </Container>
-      <div className="d-flex justify-content-center align-items-center">
-        <Button
-          variant="primary"
-          size="md"
-          onClick={async () => {
-            try {
-              const result = await axios(
-                "https://zzzmini.github.io/js/react_data_01.json"
-              );
-              let temp = [...product, ...result.data];
-              setProduct(temp);
-            } catch (error) {
-              console.log("axios 가져오기 실패");
-            }
-
-            // 데이터를 3개 가져오는 함수
-            // axios
-            //   .get("https://zzzmini.github.io/js/react_data_01.json")
-            //   .then((result) => {
-            //     let temp = [...product];
-            //     for (let x of result.data) {
-            //       temp.push(x);
-            //     }
-            //     setProduct(temp);
-            //   })
-            //   .catch(() => {
-            //     console.log("가져오기 실패");
-            //   });
-          }}
-        >
+      <div className="text-center my-3">
+        {loading && <div>Loading .... Please Wait !!</div>}
+      </div>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ marginBottom: "100px" }}
+      >
+        <Button variant="primary" size="md" onClick={handleClick}>
           데이터 가져오기
         </Button>
       </div>
