@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Discount from "../Discount";
+import Nav from "react-bootstrap/Nav";
+import TabContent from "../TabContent";
 
 function Detail({ product }) {
-
   const [showAlert, setShowAlert] = useState(true);
-  const [inputData, setInputData] = useState('');
+  const [inputData, setInputData] = useState("");
   // 숫자말고 문자 입력 시 처리를 확인할 논리값
   const [state, setState] = useState(true);
-  
+
+  // 탭을 눌렀을 때 선택되는 페이지값을 갖는 스테이트
+  const [tabState, setTabState] = useState(0);
+
   // useEffect 실행 확인
   useEffect(() => {
     // 타이머를 붙이고 2초 후에 Discount가 사라지도록
@@ -18,13 +22,14 @@ function Detail({ product }) {
       clearTimeout(myTimer);
     };
     // 처음 실행될 때 딱 1번만 실행된다는 의미
-  }), [];
+  }),
+    [];
 
   // 입력 수량 확인용 Effect
   // input 상자에만 반응
   useEffect(() => {
     // inputData state가 문자라면
-    if(isNaN(inputData)){
+    if (isNaN(inputData)) {
       setState(true);
     } else {
       setState(false);
@@ -53,9 +58,7 @@ function Detail({ product }) {
 
   return (
     <div className="container">
-      <div className="container mt-2">
-        { showAlert && <Discount  /> }
-      </div>
+      <div className="container mt-2">{showAlert && <Discount />}</div>
       <div className="row">
         <div className="col-md-6">
           <img src={`/images/shoes${findProduct.id + 1}.jpg`} width="100%" />
@@ -64,18 +67,40 @@ function Detail({ product }) {
           <h4 className="pt-5">{findProduct.title}</h4>
           <p>{findProduct.content}</p>
           {/* 문자가 들어올 때 출력할 내용 */}
-          { state && <div>오류</div>}
-          <p>
+          {state && <div>오류</div>}
+          {/* <p>
             수량 : 
             <input 
             type="text" 
             style={{marginLeft: "10px"}}
             onChange={(e) => {setInputData(e.target.value);}} />
+          </p> */}
+          <p>
+            {findProduct.price}
+            <span style={{ marginLeft: "4px" }}>원</span>
           </p>
-          <p>{findProduct.price}</p>
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
+      <Nav variant="tabs" defaultActiveKey="/home">
+        <Nav.Item>
+          <Nav.Link eventKey="link-1" onClick={() => {setTabState(0);}}>
+            버튼1
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link-2" onClick={() => {setTabState(1);}}>
+            버튼2
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link-3" onClick={() => {setTabState(2);}}>
+            버튼3
+          </Nav.Link>
+        </Nav.Item>
+      </Nav>
+      {/* 선택한 탭의 내용이 표시되는 공간 */}
+      <TabContent tabState={tabState}/>
     </div>
   );
 }
