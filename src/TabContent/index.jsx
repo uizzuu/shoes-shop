@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DetailInfo from "../TabInfo/DetailInfo";
 import Shipping from "../TabInfo/Shipping";
 import SizeGuide from "../TabInfo/SizeGuide";
+import Review from "../TabInfo/Review";
 
 function TabContent({ tabState, product, className }) {
   // fade 값으로 css를 지정하도록 ...
@@ -24,7 +25,8 @@ function TabContent({ tabState, product, className }) {
       {[
         <DetailInfo product={product}/>,
         <SizeGuide />,
-        <Shipping />, 
+        <Shipping />,
+        <Review productId={product.id}/>
       ] [tabState]}
     </div>
   );
