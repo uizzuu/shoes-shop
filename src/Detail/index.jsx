@@ -5,6 +5,8 @@ import Nav from "react-bootstrap/Nav";
 import TabContent from "../TabContent";
 
 function Detail({ product }) {
+  let [detailFade, setDetailFade] = useState('');
+
   const [showAlert, setShowAlert] = useState(true);
   const [inputData, setInputData] = useState("");
   // 숫자말고 문자 입력 시 처리를 확인할 논리값
@@ -12,6 +14,18 @@ function Detail({ product }) {
 
   // 탭을 눌렀을 때 선택되는 페이지값을 갖는 스테이트
   const [tabState, setTabState] = useState(0);
+
+  // 애니메이션 용 Effect
+  useEffect(() => {
+    let timer = setTimeout(() => {
+        setDetailFade('ani_end');
+    }, 100);
+    return(() => {
+        clearTimeout(timer);
+        setDetailFade('');
+    });
+  }, []
+);
 
   // useEffect 실행 확인
   useEffect(() => {
@@ -57,7 +71,7 @@ function Detail({ product }) {
   }
 
   return (
-    <div className="container">
+    <div className={`container ani_start ${detailFade}`}>
       <div className="container mt-2">{showAlert && <Discount />}</div>
       <div className="row">
         <div className="col-md-6">
@@ -82,19 +96,19 @@ function Detail({ product }) {
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
-      <Nav variant="tabs" defaultActiveKey="/home">
+      <Nav variant="tabs" ActiveKey={`link-${tabState}`}>
         <Nav.Item>
-          <Nav.Link eventKey="link-1" onClick={() => {setTabState(0);}}>
+          <Nav.Link eventKey="link-0" onClick={() => {setTabState(0);}}>
             버튼1
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-2" onClick={() => {setTabState(1);}}>
+          <Nav.Link eventKey="link-1" onClick={() => {setTabState(1);}}>
             버튼2
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-3" onClick={() => {setTabState(2);}}>
+          <Nav.Link eventKey="link-2" onClick={() => {setTabState(2);}}>
             버튼3
           </Nav.Link>
         </Nav.Item>
