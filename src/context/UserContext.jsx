@@ -1,0 +1,23 @@
+import axios from "axios";
+import { createContext, useEffect, useState } from "react";
+
+export const UserContext = createContext();
+
+function UserProvider({children}){
+    // 유저 정보를 담는 스테이트 선언
+    const [loginUser, setLoginUser] = useState(null);
+    useEffect(() => {
+        axios
+        .get("https://zzmini.github.io/js/userdata.json")
+        .then((res) => setLoginUser(res.data))
+        .catch((error) => console.log("Error : ", error));
+    }, []);
+
+    return(
+        <UserContext.Provider value={{loginUser, setLoginUser}}>
+            {children}
+        </UserContext.Provider>
+    );
+}
+
+export default UserProvider;
