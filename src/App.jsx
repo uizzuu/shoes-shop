@@ -8,6 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import Detail from "./Detail";
 import About from "./About";
 import Home from "./Home";
+import { UserContext } from "./context/UserContext";
 
 function App() {
   // 상품정보를 갖는 product 스테이트를 만든다.

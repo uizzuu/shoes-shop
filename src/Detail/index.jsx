@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Discount from "../Discount";
 import Nav from "react-bootstrap/Nav";
 import TabContent from "../TabContent";
+import axios from "axios";
+import { UserContext } from "../context/UserContext";
 
 function Detail({ product }) {
+  const {loginUser} = useContext(UserContext);
+
   let [detailFade, setDetailFade] = useState("");
 
   const [showAlert, setShowAlert] = useState(true);
@@ -110,6 +114,7 @@ function Detail({ product }) {
             {findProduct.price}
             <span style={{ marginLeft: "4px" }}>원</span>
           </p>
+          <p>{loginUser && <span>{loginUser.email}</span>}</p>
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
