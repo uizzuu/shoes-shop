@@ -144,6 +144,16 @@ function Detail({ product }) {
             배송
           </Nav.Link>
         </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            eventKey="link-3"
+            onClick={() => {
+              handleTabChange(3);
+            }}
+          >
+            리뷰
+          </Nav.Link>
+        </Nav.Item>
       </Nav>
       {/* 선택한 탭의 내용이 표시되는 공간 */}
       <TabContent
