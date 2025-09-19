@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Nav, Navbar , NavDropdown } from "react-bootstrap";
-import './AppNavBar.css';
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import "./AppNavBar.css";
 // Route : 페이지(컴포넌트) 이동 처리
 // Routes : Route를 감싸는 용도
 // useParams : url에 담겨있는 정보를 획득
@@ -9,14 +9,15 @@ import './AppNavBar.css';
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { useContext } from "react";
+import userStore from "../store/userStore";
 
-
-function AppNavBar(){
-
+function AppNavBar() {
   // Contex에 저장되어 있는 정보를 변수에 담는 작업
   const { loginUser } = useContext(UserContext);
-  console.log(loginUser);
-  
+
+  // 스토어에서 정보 가져오기 (zustand 사용)
+  const { userName, productStock } = userStore();
+  const changeName = userStore((state) => state.changeName);
 
   const navigate = useNavigate();
 
@@ -27,18 +28,33 @@ function AppNavBar(){
           <Container>
             <Navbar.Brand>Muzinjang</Navbar.Brand>
             <Nav className="me-auto">
-              <Nav.Link onClick={()=>{navigate('/');}}>Home</Nav.Link>
+              <Nav.Link
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                Home
+              </Nav.Link>
               {/* <Nav.Link onClick={()=>{navigate('/detail');}}>Detail</Nav.Link> */}
-              <Nav.Link>Cart</Nav.Link>
-              <Nav.Link onClick={()=>navigate('/about')}>About</Nav.Link>
+              <Nav.Link onClick={() => navigate("/cart")}>Cart</Nav.Link>
+              <Nav.Link onClick={() => navigate("/about")}>About</Nav.Link>
               <NavDropdown title="Info" id="basic-nav-dropdown">
-                <NavDropdown.Item onClick={()=>navigate('/about/member')}>Member</NavDropdown.Item>
-                <NavDropdown.Item onClick={()=>navigate('/about/location')}>Location</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => navigate("/about/member")}>
+                  Member
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => navigate("/about/location")}>
+                  Location
+                </NavDropdown.Item>
               </NavDropdown>
             </Nav>
             <Nav className="ms-auto align-items-center">
               <Nav.Link as="span">
-                {loginUser?.name ? `${loginUser.name}님 로그인` : "로그인 해주세요"}
+                {/* {loginUser?.name ? `${loginUser.name}님 로그인` : "로그인 해주세요"} */}
+                {`${userName}님 로그인`}
+              </Nav.Link>
+              {/* 버튼 클릭 시 이름 변경 */}
+              <Nav.Link as="button" onClick={changeName}>
+                이름 변경
               </Nav.Link>
             </Nav>
           </Container>
