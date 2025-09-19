@@ -5,27 +5,49 @@ import Nav from "react-bootstrap/Nav";
 import TabContent from "../TabContent";
 
 function Detail({ product }) {
-  let [detailFade, setDetailFade] = useState('');
+  let [detailFade, setDetailFade] = useState("");
 
   const [showAlert, setShowAlert] = useState(true);
   const [inputData, setInputData] = useState("");
+
   // 숫자말고 문자 입력 시 처리를 확인할 논리값
   const [state, setState] = useState(true);
 
-  // 탭을 눌렀을 때 선택되는 페이지값을 갖는 스테이트
-  const [tabState, setTabState] = useState(0);
+  // /detail/:id 에서 받은 id pathvariable 값을 확인
+  // hook : useParams
+  let { id } = useParams();
+  const navigate = useNavigate();
+
+  // 페이지 상태: sessionStorage 기반
+  const [tabState, setTabState] = useState(() => 0); // 초기값 0
+
+  useEffect(() => {
+    // 같은 페이지 내 새로고침 시 sessionStorage에 값이 있으면 반영
+    const saved = sessionStorage.getItem(`tabState_${id}`);
+    if (saved) setTabState(Number(saved));
+
+    return () => {
+      // Detail 컴포넌트 언마운트 시 sessionStorage 제거 → 다른 페이지 갔다오면 초기화
+      sessionStorage.removeItem(`tabState_${id}`);
+    };
+  }, [id]);
+
+  // 탭 변경 시
+  const handleTabChange = (tabIndex) => {
+    setTabState(tabIndex);
+    sessionStorage.setItem(`tabState_${id}`, tabIndex);
+  };
 
   // 애니메이션 용 Effect
   useEffect(() => {
     let timer = setTimeout(() => {
-        setDetailFade('ani_end');
+      setDetailFade("ani_end");
     }, 100);
-    return(() => {
-        clearTimeout(timer);
-        setDetailFade('');
-    });
-  }, []
-);
+    return () => {
+      clearTimeout(timer);
+      setDetailFade("");
+    };
+  }, []);
 
   // useEffect 실행 확인
   useEffect(() => {
@@ -49,11 +71,6 @@ function Detail({ product }) {
       setState(false);
     }
   }, [inputData]);
-
-  // /detail/3 에서 받은 id pathvariable 값을 확인
-  // hook : useParams
-  let { id } = useParams();
-  const navigate = useNavigate();
 
   // 가져온 pathvariable 값을 숫자로 변환
   // props 로 전달받은 product 배열에서 해당하는 객체만 찾음
@@ -96,25 +113,44 @@ function Detail({ product }) {
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
-      <Nav variant="tabs" ActiveKey={`link-${tabState}`}>
+      <Nav variant="tabs" activeKey={`link-${tabState}`}>
         <Nav.Item>
-          <Nav.Link eventKey="link-0" onClick={() => {setTabState(0);}}>
-            버튼1
+          <Nav.Link
+            eventKey="link-0"
+            onClick={() => {
+              handleTabChange(0);
+            }}
+          >
+            특징
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-1" onClick={() => {setTabState(1);}}>
-            버튼2
+          <Nav.Link
+            eventKey="link-1"
+            onClick={() => {
+              handleTabChange(1);
+            }}
+          >
+            사이즈
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-2" onClick={() => {setTabState(2);}}>
-            버튼3
+          <Nav.Link
+            eventKey="link-2"
+            onClick={() => {
+              handleTabChange(2);
+            }}
+          >
+            배송
           </Nav.Link>
         </Nav.Item>
       </Nav>
       {/* 선택한 탭의 내용이 표시되는 공간 */}
-      <TabContent tabState={tabState}/>
+      <TabContent
+        className="tab-content-area"
+        tabState={tabState}
+        product={findProduct}
+      />
     </div>
   );
 }
