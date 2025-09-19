@@ -8,7 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import Detail from "./Detail";
 import About from "./About";
 import Home from "./Home";
-import { UserContext } from "./context/UserContext";
+import Cart from "./Cart";
 
 function App() {
   // 상품정보를 갖는 product 스테이트를 만든다.
@@ -27,7 +27,7 @@ function App() {
         {/* PathVariable */}
         {/* /detail/1, /detail/2 이런식으로 적용 */}
         <Route path="/detail/:id" element={<Detail product={product}/>} />
-        <Route path="/cart" element={<div>장바구니페이지</div>} />
+        <Route path="/cart" element={<Cart />} />
         {/* 중첩 라우팅 처리 */}
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>Member</div>} />
