@@ -10,10 +10,15 @@
 .ani_start{
   /* 요소를 완전히 투명하게 시작 */
   opacity: 0;
+  transition: opacity 1s;
 }
 
 .ani_end{
   /* 요소를 완전히 투명하게 시작 */
   opacity: 1;
   transition: opacity 1s;
+}
+
+.tab-content-area{
+  margin: 8px 18px;
 }

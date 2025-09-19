@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import DetailInfo from "../TabInfo/DetailInfo";
+import Shipping from "../TabInfo/Shipping";
+import SizeGuide from "../TabInfo/SizeGuide";
 
-function TabContent({ tabState }) {
+function TabContent({ tabState, product, className }) {
   // fade 값으로 css를 지정하도록 ...
   let [fade, setFade] = useState('');
   // useEffect로 타이머를 설정
@@ -17,11 +20,11 @@ function TabContent({ tabState }) {
 );
 
   return (
-    <div className={`ani_start ${fade}`}>
+    <div className={`ani_start ${fade} ${className || ''}`}>
       {[
-        <div>내용1</div>,
-        <div>내용2</div>,
-        <div>내용3</div>, 
+        <DetailInfo product={product}/>,
+        <SizeGuide />,
+        <Shipping />, 
       ] [tabState]}
     </div>
   );
