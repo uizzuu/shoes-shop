@@ -16,9 +16,9 @@ function AppNavBar() {
   const { loginUser } = useContext(UserContext);
 
   // 스토어에서 정보 가져오기 (zustand 사용)
-  const { userName, productStock } = userStore();
-  const changeName = userStore((state) => state.changeName);
-
+  const { userName, productStock, productName, changeName, addProduct } =
+    userStore();
+  
   const navigate = useNavigate();
 
   return (
@@ -53,8 +53,14 @@ function AppNavBar() {
                 {`${userName}님 로그인`}
               </Nav.Link>
               {/* 버튼 클릭 시 이름 변경 */}
-              <Nav.Link as="button" onClick={changeName}>
-                이름 변경
+              <Nav.Link
+                as="button"
+                onClick={() => {
+                  changeName();
+                  addProduct("르무통", 5);
+                }}
+              >
+                유저변경
               </Nav.Link>
             </Nav>
           </Container>
