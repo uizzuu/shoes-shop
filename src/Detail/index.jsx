@@ -5,9 +5,11 @@ import Nav from "react-bootstrap/Nav";
 import TabContent from "../TabContent";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
+import cartStore from "../store/cartStore";
+import { formatKRW } from "../util/formatKRW";
 
 function Detail({ product }) {
-  const {loginUser} = useContext(UserContext);
+  const { loginUser } = useContext(UserContext);
 
   let [detailFade, setDetailFade] = useState("");
 
@@ -24,6 +26,40 @@ function Detail({ product }) {
 
   // 페이지 상태: sessionStorage 기반
   const [tabState, setTabState] = useState(() => 0); // 초기값 0
+
+  // cartStore에서 addItem 가져오기
+  const { addItem, cartData } = cartStore(); 
+
+  // 주문하기 버튼 클릭
+  const handleOrder = () => {
+    const orderItem = {
+      id: findProduct.id,
+      name: findProduct.title,
+      count: 1,
+      price: findProduct.price,
+    };
+
+    const existingItem = cartStore
+      .getState()
+      .cartData.find((x) => x.id === orderItem.id);
+
+    if (existingItem) {
+      const confirmAdd = window.confirm(
+        "이미 장바구니에 있는 상품입니다. 수량을 1개 추가하시겠습니까?"
+      );
+      if (!confirmAdd) return; // 사용자가 아니오 클릭하면 종료
+    }
+
+    addItem(orderItem); // 장바구니에 추가/수량 증가
+
+    // 추가 후 이동 선택
+    const goToCart = window.confirm(
+      "장바구니에 상품이 추가되었습니다. 장바구니로 이동하시겠습니까?"
+    );
+    if (goToCart) {
+      navigate("/cart");
+    }
+  };
 
   useEffect(() => {
     // 같은 페이지 내 새로고침 시 sessionStorage에 값이 있으면 반영
@@ -91,6 +127,9 @@ function Detail({ product }) {
     return null;
   }
 
+  // 장바구니에 이 상품이 이미 있는지 확인
+  const isInCart = cartData.some((item) => item.id === findProduct.id);
+
   return (
     <div className={`container ani_start ${detailFade}`}>
       <div className="container mt-2">{showAlert && <Discount />}</div>
@@ -111,11 +150,22 @@ function Detail({ product }) {
             onChange={(e) => {setInputData(e.target.value);}} />
           </p> */}
           <p>
-            {findProduct.price}
-            <span style={{ marginLeft: "4px" }}>원</span>
+            {formatKRW(findProduct.price)}
+            <span style={{ marginLeft: "4px" }}></span>
           </p>
           <p>{loginUser && <span>{loginUser.email}</span>}</p>
-          <button className="btn btn-danger">주문하기</button>
+          <button className="btn btn-danger" onClick={handleOrder}>
+            {isInCart ? "수량추가" : "주문하기"}
+          </button>
+          {isInCart && (
+            <button
+              className="btn btn-primary"
+              style={{marginLeft:"4px"}}
+              onClick={() => navigate("/cart")}
+            >
+              카트 보기
+            </button>
+          )}
         </div>
       </div>
       <Nav variant="tabs" activeKey={`link-${tabState}`}>
