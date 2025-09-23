@@ -10,16 +10,47 @@ import { Link, useNavigate } from "react-router-dom";
 // import { UserContext } from "../context/UserContext";
 // import { useContext } from "react";
 import userStore from "../store/userStore";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { useState } from "react";
 
 function AppNavBar() {
   // Contex에 저장되어 있는 정보를 변수에 담는 작업
   // const { loginUser } = useContext(UserContext);
 
   // 스토어에서 정보 가져오기 (zustand 사용)
-  const { userName, changeName, addProduct } =
-    userStore();
-  
+  const { userName, changeName, addProduct } = userStore();
+
+  // 로그인 정보를 담을 스테이트 선언
+  const [userInfo, setUserInfo] = useState(undefined);
+
   const navigate = useNavigate();
+
+  // 파이어베이스 구글 로그인 설정
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+
+  const handleAuth = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // The signed-in user info.
+        const user = result.user;
+        setUserInfo(user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleLogOut = () => {
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      setUserInfo(undefined);
+      navigate("/");
+    }).catch((error) => {
+      // An error happened.
+      console.log(error);
+    });
+  }
 
   return (
     <>
@@ -36,7 +67,9 @@ function AppNavBar() {
                 Home
               </Nav.Link>
               {/* <Nav.Link onClick={()=>{navigate('/detail');}}>Detail</Nav.Link> */}
-              <Nav.Link onClick={() => navigate("/cart")}>Cart</Nav.Link>
+              {userInfo && (
+                <Nav.Link onClick={() => navigate("/cart")}>Cart</Nav.Link>
+              )}
               <Nav.Link onClick={() => navigate("/recent")}>Recent</Nav.Link>
               <Nav.Link onClick={() => navigate("/about")}>About</Nav.Link>
               <NavDropdown title="Info" id="basic-nav-dropdown">
@@ -49,20 +82,27 @@ function AppNavBar() {
               </NavDropdown>
             </Nav>
             <Nav className="ms-auto align-items-center">
-              <Nav.Link as="span">
-                {/* {loginUser?.name ? `${loginUser.name}님 로그인` : "로그인 해주세요"} */}
-                {`${userName}님 로그인`}
-              </Nav.Link>
-              {/* 버튼 클릭 시 이름 변경 */}
-              <Nav.Link
-                as="button"
-                onClick={() => {
-                  changeName();
-                  addProduct("르무통", 5);
-                }}
-              >
-                유저변경
-              </Nav.Link>
+              {userInfo ? (
+                <div className="d-flex align-items-center">
+                  <div className="userInfoWrap">
+                    <div>
+                      <img
+                        src={userInfo.photoURL}
+                        alt={userInfo.displayName}
+                        className="userImage"
+                      />
+                    </div>
+                    <span className="me-3 text-light small">
+                      {userInfo.displayName
+                        ? `${userInfo.displayName} 님`
+                        : userInfo.email}
+                    </span>
+                  </div>
+                  <Nav.Link onClick={handleLogOut}>LogOut</Nav.Link>
+                </div>
+              ) : (
+                <Nav.Link onClick={handleAuth}>LogIn</Nav.Link>
+              )}
             </Nav>
           </Container>
         </Navbar>
