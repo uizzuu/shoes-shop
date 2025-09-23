@@ -28,7 +28,7 @@ function Detail({ product }) {
   const [tabState, setTabState] = useState(() => 0); // 초기값 0
 
   // cartStore에서 addItem 가져오기
-  const { addItem, cartData } = cartStore(); 
+  const { addItem, cartData } = cartStore();
 
   // 주문하기 버튼 클릭
   const handleOrder = () => {
@@ -98,8 +98,7 @@ function Detail({ product }) {
       clearTimeout(myTimer);
     };
     // 처음 실행될 때 딱 1번만 실행된다는 의미
-  }),
-    [];
+  }, []);
 
   // 입력 수량 확인용 Effect
   // input 상자에만 반응
@@ -114,15 +113,18 @@ function Detail({ product }) {
 
   // 가져온 pathvariable 값을 숫자로 변환
   // props 로 전달받은 product 배열에서 해당하는 객체만 찾음
-  const findProduct = product.find((item) => {
-    return item.id === Number(id);
-  });
+  let findProduct = product.find((item) => item.id === Number(id));
+  if (!findProduct) {
+    // localStorage에서 product 복원
+    const savedProduct = localStorage.getItem("product");
+    if (savedProduct) {
+      const parsedProduct = JSON.parse(savedProduct);
+      findProduct = parsedProduct.find((item) => item.id === Number(id));
+    }
+  }
 
-  // 해당하는 제품이 존재하지 않을 때 처리
-  if (findProduct == null) {
+  if (!findProduct) {
     alert("찾는 상품이 없습니다.");
-    // 이전페이지로 이동
-    // history.back() : 자바스크립트 용
     navigate(-1);
     return null;
   }
@@ -134,8 +136,15 @@ function Detail({ product }) {
     <div className={`container ani_start ${detailFade}`}>
       <div className="container mt-2">{showAlert && <Discount />}</div>
       <div className="row">
-        <div className="col-md-6">
-          <img src={`/images/shoes${findProduct.id + 1}.jpg`} width="100%" />
+        <div
+          className="col-md-6"
+          style={{
+            maxHeight: "416px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <img src={`/images/shoes${findProduct.id + 1}.jpg`} height="100%" />
         </div>
         <div className="col-md-6">
           <h4 className="pt-5">{findProduct.title}</h4>
@@ -160,7 +169,7 @@ function Detail({ product }) {
           {isInCart && (
             <button
               className="btn btn-primary"
-              style={{marginLeft:"4px"}}
+              style={{ marginLeft: "4px" }}
               onClick={() => navigate("/cart")}
             >
               카트 보기
