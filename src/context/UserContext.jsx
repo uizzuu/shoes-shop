@@ -8,7 +8,7 @@ function UserProvider({children}){
     const [loginUser, setLoginUser] = useState(null);
     useEffect(() => {
         axios
-        .get("https://zzmini.github.io/js/userdata.json")
+        .get("https://zzzmini.github.io/js/userdata.json")
         .then((res) => setLoginUser(res.data))
         .catch((error) => console.log("Error : ", error));
     }, []);

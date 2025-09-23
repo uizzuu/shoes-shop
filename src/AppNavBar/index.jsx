@@ -37,6 +37,7 @@ function AppNavBar() {
               </Nav.Link>
               {/* <Nav.Link onClick={()=>{navigate('/detail');}}>Detail</Nav.Link> */}
               <Nav.Link onClick={() => navigate("/cart")}>Cart</Nav.Link>
+              <Nav.Link onClick={() => navigate("/recent")}>Recent</Nav.Link>
               <Nav.Link onClick={() => navigate("/about")}>About</Nav.Link>
               <NavDropdown title="Info" id="basic-nav-dropdown">
                 <NavDropdown.Item onClick={() => navigate("/about/member")}>

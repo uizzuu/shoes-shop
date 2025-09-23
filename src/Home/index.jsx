@@ -1,11 +1,21 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Product from "../Product";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import bg_png from "../assets/images/bg.png";
 
 function Home({ product, setProduct, count, setCount }) {
-  const [loading, setLoading] = useState(false); // 로딩 상태
+  // 로딩 상태
+  const [loading, setLoading] = useState(false); 
+
+  // 마운트 시 localStorage에서 product, count 복원
+  useEffect(() => {
+    const savedProduct = localStorage.getItem("product");
+    const savedCount = localStorage.getItem("count");
+
+    if (savedProduct) setProduct(JSON.parse(savedProduct));
+    if (savedCount) setCount(Number(savedCount));
+  }, [setProduct, setCount]);
 
   const handleClick = async () => {
     if (count >= 2) {
@@ -18,8 +28,13 @@ function Home({ product, setProduct, count, setCount }) {
       const fileNum = String(count + 1).padStart(2, "0");
       const url = `https://zzzmini.github.io/js/react_data_${fileNum}.json`;
       const result = await axios.get(url);
-      setProduct([...product, ...result.data]);
+      const updatedProduct = [...product, ...result.data];
+      setProduct(updatedProduct);
       setCount(count + 1);
+
+      // 가져온 데이터 localStorage에 저장
+      localStorage.setItem("product", JSON.stringify(updatedProduct));
+      localStorage.setItem("count", count + 1);
     } catch (error) {
       console.log("axios 가져오기 실패", error);
     } finally {
