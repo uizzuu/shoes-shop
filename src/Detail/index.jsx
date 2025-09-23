@@ -162,7 +162,7 @@ function Detail({ product }) {
             {formatKRW(findProduct.price)}
             <span style={{ marginLeft: "4px" }}></span>
           </p>
-          <p>{loginUser && <span>{loginUser.email}</span>}</p>
+          {/* <p>{loginUser && <span>{loginUser.email}</span>}</p> */}
           <button className="btn btn-danger" onClick={handleOrder}>
             {isInCart ? "수량추가" : "주문하기"}
           </button>

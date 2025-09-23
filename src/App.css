@@ -26,3 +26,16 @@ html {
 .tab-content-area{
   margin: 8px 18px;
 }
+
+.userInfoWrap{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userImage{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: block;
+}
